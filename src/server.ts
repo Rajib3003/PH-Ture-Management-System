@@ -12,13 +12,12 @@ let server: Server;
 
 // let myAge;
 
-const serverStart = async () => {
-    console.log(envVars.NODE_ENV);
+const serverStart = async () => {    
     try {
-        await mongoose.connect("mongodb+srv://mongodb:mongodb@cluster0.qgah9aq.mongodb.net/tour-db?retryWrites=true&w=majority&appName=Cluster0")
+        await mongoose.connect(envVars.DB_URL as string);
         console.log("Database connected");
-        server = app.listen(5000, () => {
-            console.log("Server started on port 5000");
+        server = app.listen(envVars.PORT, () => {
+            console.log(`Server started on port ${envVars.PORT}`);
         })
     }catch (error) {
         console.log(error);
