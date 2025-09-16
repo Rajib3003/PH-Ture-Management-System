@@ -50,4 +50,14 @@ npm i ts-node-dev @types/express @types/cors @types/dotenv @types/jsonwebtoken
 
 
 -->
+<!-- amader joto status code ache oi gulo hate likhte hobe na default status deoya ache oi khan theke choice kore dilei hobe er jonn termianl a command ta run kore install korte hobe -->
+npm i http-status-codes
 
+# one module work setp by setp flow 
+- route matching (app.ts -> routes to index.ts -> user.router.ts )
+- controller 
+- service
+- model 
+- DB
+
+<!-- every part a amader ei koyta kaj korte hobe tobe routeing a app.ts file temon are kono kaj nai -->
