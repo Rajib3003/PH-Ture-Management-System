@@ -61,3 +61,13 @@ npm i http-status-codes
 - DB
 
 <!-- every part a amader ei koyta kaj korte hobe tobe routeing a app.ts file temon are kono kaj nai -->
+
+password has(#) tag korar jonno terminal a nicher command use korte hobe.
+- npm i bcryptjs
+- npm i -D @types/bcryptjs
+
+password kaj ses hoyar por user ken akta token dite hobe. token set krorar jonno nicher 2 ta install korte hobe terminal a 
+- npm i jsonwebtoken
+- npm i -D @ types/jsonwebtoken
+
+
