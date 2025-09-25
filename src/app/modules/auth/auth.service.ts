@@ -3,9 +3,7 @@ import httpStatusCode from 'http-status-codes';
 import AppError from "../../errorHelpers/AppError";
 import { IUser } from "../user/user.interface"
 import { User } from "../user/user.model";
-// import jwt from "jsonwebtoken";
-import { generateToken } from '../../utils/jwt';
-import { envVars } from '../../config/env';
+import { createUserTokens } from '../../utils/userTokens';
 
 const credentialsLogin = async (payload : Partial<IUser>) => {
     const {email, password} = payload
@@ -21,22 +19,37 @@ const credentialsLogin = async (payload : Partial<IUser>) => {
         throw new AppError(httpStatusCode.BAD_REQUEST, "Increect password!!","");
     }
 
-    const jwtPayload = {
-        userId: isUserExist._id,
-        email: isUserExist.email,
-        role: isUserExist.role,
-    }
+    // const jwtPayload = {
+    //     userId: isUserExist._id,
+    //     email: isUserExist.email,
+    //     role: isUserExist.role,
+    // }
 
-    const accessToken = generateToken(jwtPayload,envVars.JWT_ACCESS_SECRET,envVars.JWT_ACCESS_EXPIRES)
+    // const accessToken = generateToken(jwtPayload, envVars.JWT_ACCESS_SECRET, envVars.JWT_ACCESS_EXPIRES)
+
+    // const refershToken = generateToken(jwtPayload, envVars.JWT_REFRESH_SECRET, envVars.JWT_REFRESH_EXPIRES)
     
+    const userTokens = createUserTokens(isUserExist)
+
+
     // const accessToken = jwt.sign(jwtPayload, "secret", {
     //     expiresIn : "1d"
     // })
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _password, ...userWithoutPassword } = isUserExist.toObject();
+
+
+
     
     
 
     return {
-        accessToken
+        accessToken: userTokens.accessToken,
+        refershToken: userTokens.refershToken,
+        user: {
+            userWithoutPassword
+        }
     }
     
 }
