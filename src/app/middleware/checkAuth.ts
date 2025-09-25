@@ -22,7 +22,7 @@ export const checkAuth = (...authRoles: string[]) => async(req: Request, res: Re
         if(!authRoles.includes(verifiedToken.role)){
             throw new AppError(httpStatusCode.BAD_REQUEST, "This Role is not permitated", "")
         }
-        
+        req.user = verifiedToken
         next()
     } catch (error) {
         next(error)
