@@ -70,4 +70,19 @@ password kaj ses hoyar por user ken akta token dite hobe. token set krorar jonno
 - npm i jsonwebtoken
 - npm i -D @ types/jsonwebtoken
 
+cookie set korar jonno install korte hobe 
+- npm i cookie-parser
+- npm i -D @types/cookie-parser
+
+google authenticaton korar jonno 
+=> google search a giye passport js search korte hobe . ei khan theke passport authentication document paoya jabe.
+=> google search a giye google cloud search korte hobe. Google Cloud: Cloud Computing Services click kore top right side a Console button a click korte hobe. left side toggole button a click kore API & service a click korte hobe . left side a auth and client service a clcik korte hobe. left side client clcik korle create app ta paoya jabe . App ta ke click korle GOOGLE_CLIENT_SECRET= and GOOGLE_CLIENT_ID= right side paoya jabe ja kina .env file likha hoiche . tobe GOOGLE_CLIENT_SECRET ta first time copy kore nite hobe jodi copy korte vule jai ta hole new create kore age copy kore ager ta delete kore dite hobe. first a disable kore then delete korte hobe. then .env file a id and secret ta bosaite hobe. 
+
+=> are o kicho pacage install korte hobe
+- npm i passport passport-local passport-google-oauth20
+- npm i -D @types/passport @types/passport-local @types/passport-google-oauth20
+
+
+
+
 
