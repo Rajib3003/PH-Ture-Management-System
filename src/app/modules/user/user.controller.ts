@@ -9,6 +9,7 @@ import sendResponse from "../../utils/sendResponse";
 import { envVars } from '../../config/env';
 import { JwtPayload } from "jsonwebtoken";
 import { verifytoken } from "../../utils/jwt";
+import AppError from "../../errorHelpers/AppError";
 // import AppError from "../../errorHelpers/AppError";
 
 
@@ -54,6 +55,9 @@ const updatedUser = catchAsync(async(req: Request, res: Response, next: NextFunc
     // const verifiedToken = verifytoken(token as string, envVars.JWT_ACCESS_SECRET ) as JwtPayload
 
     const verifiedToken = req.user;
+    if(!verifiedToken){
+            throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")
+        }
 
     const user = await userService.updateUser(userId, payload, verifiedToken); 
 
