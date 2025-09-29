@@ -7,6 +7,8 @@ import { AuthService } from './auth.service';
 import AppError from '../../errorHelpers/AppError';
 import { set } from 'mongoose';
 import { setAuthCookie } from '../../utils/setCookie';
+import { createUserTokens } from '../../utils/userTokens';
+import { envVars } from '../../config/env';
 
 const credentialsLogin = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const loginInfo = await AuthService.credentialsLogin(req.body);
@@ -83,10 +85,37 @@ const resetPassword = catchAsync(async(req: Request, res: Response, next: NextFu
         data: null,
     })
 })
+const googleCallbackController= catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    let redirectTo = req.query.state ? req.query.state as string : "";
+    if(redirectTo.startsWith("/")){
+        redirectTo = redirectTo.slice(1)
+    }
+
+
+    const user = req.user;
+
+    if(!user){
+        throw new AppError(httpStatusCode.NOT_FOUND,"User Not Found","")
+    }
+    const tokenInfo = createUserTokens(user);
+
+    setAuthCookie(res,tokenInfo)
+    
+    // sendResponse(res, {
+    //     success: true,
+    //     message: "Password Changed successfully!!",
+    //     statusCode: httpStatusCode.OK,
+    //     data: null,
+    // })
+    res.redirect(`${envVars.FRONTEND_URL}/${redirectTo}`)
+})
+
+
 
 export const AuthController = {
     credentialsLogin,
     getNewAccessToken,
     logout,
-    resetPassword
+    resetPassword,
+    googleCallbackController
 }
