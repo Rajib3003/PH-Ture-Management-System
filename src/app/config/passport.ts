@@ -4,8 +4,46 @@ import passport from "passport";
 import { Strategy as GoogleStrategy, Profile, VerifyCallback } from "passport-google-oauth20";
 import { User } from '../modules/user/user.model';
 import { Role } from '../modules/user/user.interface';
+import { Strategy as LoacalStrategy } from 'passport-local';
+import bcryptjs from 'bcryptjs';
 
 passport.use(
+    new LoacalStrategy({
+        usernameField: "email",
+        passwordField: "password"
+    }, async(email:string, password:string, done)=>{
+        try {
+            const isUserExist = await User.findOne({email})
+
+            if(!isUserExist){
+                return done(null, false, {message: "User does not exist"})
+            }
+
+            const isGoogleAuthenticated = isUserExist.auths?.some((providerObjects)=> providerObjects.provider === "Google")
+
+            if(isGoogleAuthenticated && !isUserExist.password){
+                return done(null, false, {message: "User is registered with Google. Please login with Google"})
+            }
+
+            if(!isUserExist.password){
+                return done(null, false, {message: "Password is not set for this user"})
+            }
+
+
+            const isPasswordMatched = await bcryptjs.compare(password as string, isUserExist.password as string)
+            if(!isPasswordMatched){
+                return done(null, false, {message: "Password does not match"});
+            }
+            return done(null, isUserExist)
+        } catch (error) {
+            console.log("Local Strategy Error", error)
+            done(error)
+        }
+    })
+)
+
+passport.use(
+    // strategy ke googlestrategy rename kore ai khane bosano hoiche 
     new GoogleStrategy({
         clientID: envVars.GOOGLE_CLIENT_ID,
         clientSecret: envVars.GOOGLE_CLIENT_SECRET,
