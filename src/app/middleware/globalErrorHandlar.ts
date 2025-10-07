@@ -3,31 +3,48 @@
 import { NextFunction, Request, Response } from "express"
 import { envVars } from "../config/env"
 import AppError from "../errorHelpers/AppError"
+import { TErrorSources } from "../interfaces/error.types";
+import { handlerDuplicatedError } from "../helpers/handlerDuplicatedError";
+import { handlerValidationError } from "../helpers/handlerValidationError";
+import { handlerCastError } from "../helpers/handlerCastError";
+import { handlerZodError } from "../helpers/handlerZodError";
+
+
 
 export const globalErrorHandlar = (error:any, req:Request, res:Response, next:NextFunction)=>{
-    console.log("globalErrorHandlar file code:",error)
-
+    
+    if(envVars.NODE_ENV === "development"){
+        console.log("globalErrorHandlar file code:",error)
+    }   
 
     let statusCode = 500
     let message = "Something went wrong!!"
+    let errorSources: TErrorSources[] | undefined = undefined;
     //duplicate key error
     if(error.code===11000){        
-        const matcheArray = error.message.match(/"([^"]*)"/)
-              
-        statusCode = 400
-        // message = `Duplicate value entered for ${Object.keys(error.keyValue)} field, please choose another value`
-        message = `globalErrorHandlar file code:Duplicate value entered for ${matcheArray[1]} field, please choose another value`
+        const simpifiedError = handlerDuplicatedError(error)
+        statusCode = simpifiedError.statusCode
+        message = simpifiedError.message       
     }
     // validation error
     else if(error.name === "ValidationError"){
-        statusCode = 400
-        message = Object.values(error.errors).map((value:any)=> value.message).join(", ")
+        const simpifiedError = handlerValidationError(error)
+        statusCode = simpifiedError.statusCode
+        message = simpifiedError.message
     } 
     // cast error/ objectId error
     else if(error.name === "CastError"){
-        statusCode = 400
-        message = `globalErrorHandlar file code:Invalid ${error.path} : ${error.value}`
+        const simpifiedError = handlerCastError(error)
+        statusCode = simpifiedError.statusCode
+        message = simpifiedError.message
     }
+    // zod error
+    else if(error.name === "ZodError"){
+        const simpifiedError = handlerZodError(error)
+        statusCode = simpifiedError.statusCode
+        message = simpifiedError.message
+        errorSources = simpifiedError.errorSources
+    }  
     else if(error instanceof AppError){
         statusCode = error.statusCode
         message = error.message
@@ -38,7 +55,8 @@ export const globalErrorHandlar = (error:any, req:Request, res:Response, next:Ne
     res.status(statusCode).json({
         success: false,
         message,
-        error,
+        errorSources,
+        error:envVars.NODE_ENV === "development" ? error : null,        
         stack: envVars.NODE_ENV === "development" ? error.stack : null, 
     })
 }
