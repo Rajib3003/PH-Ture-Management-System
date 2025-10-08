@@ -84,5 +84,19 @@ google authenticaton korar jonno
 
 
 
+<!-- akta module a suru theke ses porjonto -->
+- 1. modules folder a akta folder crearte (division)
+- 2. division ar maje (division.interface.ts) file create korte hobe. database unojayi interface ta create korte hobe.
+- 3. division ar maje (division.model.ts) file create korte hobe. interface dekhe model create korte hobe
+
+- 4. division ar maje (division.router.ts) file create korte hobe. API list dekhe router file ta create korte hobe. 
+- router kaj korar agei routes folder a index.ts file a route add kore aste hobe
+- 5. division ar maje (division.controller.ts) file create korte hobe.
+- 6. division ar maje (division.service.ts) file create korte hobe.
+
+routes folder a index.ts (division.router.ts) import korte hoy <br>
+division.router.ts file a division.controller.ts import korte hoy <br> division.controller.ts file a division.service.ts import korte hoy <br>  -> 
+
+
 
 
