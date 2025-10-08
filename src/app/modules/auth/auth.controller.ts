@@ -9,9 +9,37 @@ import { set } from 'mongoose';
 import { setAuthCookie } from '../../utils/setCookie';
 import { createUserTokens } from '../../utils/userTokens';
 import { envVars } from '../../config/env';
+import passport from 'passport';
 
 const credentialsLogin = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
-    const loginInfo = await AuthService.credentialsLogin(req.body);
+
+    // const loginInfo = await AuthService.credentialsLogin(req.body);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    passport.authenticate("local", async (err:any, user: any, info: any)=>{
+        if(err){
+            return next(err)
+        }
+        if(!user){
+            return next(new AppError(httpStatusCode.UNAUTHORIZED, info.message, ""))
+        }
+
+        const { password: _password, ...userWithoutPassword } = user.toObject();
+        const userTokens = createUserTokens(user)
+       
+        
+        setAuthCookie(res, userTokens)
+        sendResponse(res, {
+            success: true,
+            message: "User Logined In Successfully!!",
+            statusCode: httpStatusCode.OK,
+            data: {
+                accessToken : userTokens.accessToken,
+                refreshToken : userTokens.refreshToken,
+                user: userWithoutPassword
+            },
+        })
+    })(req, res, next)
 
     // res.cookie("accessToken", loginInfo.accessToken,{
     //     httpOnly: true,
@@ -22,15 +50,15 @@ const credentialsLogin = catchAsync(async(req: Request, res: Response, next: Nex
     //     secure: false,
     // })
 
-    setAuthCookie(res, loginInfo)
+    // setAuthCookie(res, loginInfo)
 
 
-    sendResponse(res, {
-        success: true,
-        message: "User Login successfully!!",
-        statusCode: httpStatusCode.OK,
-        data: loginInfo,
-    })
+    // sendResponse(res, {
+    //     success: true,
+    //     message: "User Login successfully!!",
+    //     statusCode: httpStatusCode.OK,
+    //     data: loginInfo,
+    // })
 })
 
 const getNewAccessToken = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
