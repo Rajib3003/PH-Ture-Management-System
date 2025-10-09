@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import  httpStatusCode  from 'http-status-codes';
 import {  NextFunction, Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
@@ -7,7 +8,7 @@ import { divisionService } from './division.service';
 
 
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const createDivision = catchAsync(async(req:Request, res: Response, next:NextFunction)=>{
     const division = await divisionService.createDivision(req.body);
     sendResponse(res, {
@@ -20,6 +21,43 @@ const createDivision = catchAsync(async(req:Request, res: Response, next:NextFun
 
 })
 
+const getAllDivision = catchAsync(async(req:Request, res: Response, next:NextFunction)=> {
+    const result = await divisionService.getAllDivision();
+    sendResponse(res, {
+        success: true,
+        message: "All Division get successfully!!",
+        statusCode: httpStatusCode.OK,
+        meta: result.meta,
+        data: result.data
+    })
+})
+
+const updateDivision = catchAsync(async(req:Request, res: Response, next:NextFunction)=>{
+    const divisionId = req.params.id;
+    const payload = req.body;
+    const updatedDivision = await divisionService.updateDivision(divisionId, payload);
+    sendResponse(res, {
+        success: true,
+        message: "Division updated successfully!!",
+        statusCode: httpStatusCode.OK,
+        data: updatedDivision
+    })
+});
+const deleteDivision = catchAsync(async(req:Request, res: Response, next:NextFunction)=>{
+    // delete logic will be implemented here
+    const divisionId = req.params.id;
+    const deletedDivision = await divisionService.deleteDivision(divisionId);
+    sendResponse(res, {
+        success: true,
+        message: "Division deleted successfully!!",
+        statusCode: httpStatusCode.OK,
+        data: deletedDivision
+    })
+});
+
 export const divisionController = {
-    createDivision
+    createDivision,
+    getAllDivision,
+    updateDivision,
+    deleteDivision
 }
