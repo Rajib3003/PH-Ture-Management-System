@@ -1,5 +1,5 @@
 
-export interface ITourType {
-    name: string;
+// export interface ITourType {
+//     name: string;
 
-}
+// }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { divisionController } from "./division.controller";
+import { DivisionController } from "./division.controller";
 import { validateRequest } from "../../middleware/validateRequest";
 import { createDivisionZodSchema, updateDivisionZodSchema } from "./division.validation";
 import { checkAuth } from "../../middleware/checkAuth";
@@ -11,9 +11,24 @@ const router = Router();
 
 
 
-router.post("/create",checkAuth(Role.USER),validateRequest(createDivisionZodSchema) ,divisionController.createDivision);
-router.get("/", checkAuth(Role.ADMIN,Role.SUPER_ADMIN), divisionController.getAllDivision);
-router.patch("/:id", validateRequest(updateDivisionZodSchema) ,checkAuth(Role.USER), divisionController.updateDivision);
-router.delete("/:id",checkAuth(Role.ADMIN), divisionController.deleteDivision);
+router.post(
+    "/create",
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    validateRequest(createDivisionZodSchema) ,
+    DivisionController.createDivision
+);
+router.get("/", DivisionController.getAllDivision);
+router.get("/:slug", DivisionController.getSingleDivision);
+router.patch(
+    "/:id", 
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    validateRequest(updateDivisionZodSchema), 
+    DivisionController.updateDivision
+);
+router.delete(
+    "/:id",
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN), 
+    DivisionController.deleteDivision
+);
 
 export const divisionRoutes = router
