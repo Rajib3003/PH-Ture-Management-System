@@ -5,23 +5,16 @@ import { Division } from "./division.model";
 
 
 
-const createDivision = async (payload: Partial<IDivision>) => {
-    const { name, slug, thumbnail, description } = payload;    
-    const generatedSlug = slug? slug.trim().toLowerCase().replace(/\s+/g, '-'): name?.trim().toLowerCase().replace(/\s+/g, '-');
-    const nameExists = await Division.findOne({ where: { name } });
-    if (nameExists) {
-        throw new AppError(httpStatusCode.BAD_REQUEST, 'Division name already exists','');
+const createDivision = async (payload: IDivision) => {
+   
+    const existingDivision = await Division.findOne({ name: payload.name });
+    if (existingDivision) {
+        throw new AppError(httpStatusCode.BAD_REQUEST, 
+            'A division with this name already exists.',''
+        );
     }
-    const slugExists = await Division.findOne({ where: { slug: generatedSlug } });
-    if (slugExists) {
-        throw new AppError(httpStatusCode.BAD_REQUEST, 'Division slug already exists','');
-    }
-    const division = await Division.create({
-        name,
-        slug: generatedSlug,
-        thumbnail,
-        description        
-    })
+
+    const division = await Division.create(payload)
     return division
 }
 
@@ -35,55 +28,46 @@ const getAllDivision = async () => {
         }
     }
 }
+const getSingleDivision = async (slug: string)=>{
+    const division = await Division.findOne({slug});
+   
+    return {
+        data: division,
+    }
+}
 
 const updateDivision = async (divisionId: string, payload: Partial<IDivision>) => {
     // update logic will be implemented here
-    const divisionIdExist = await Division.findById(divisionId);
-    if (!divisionIdExist) {
+    const existingDivision = await Division.findById(divisionId);
+    if (!existingDivision) {
         throw new AppError(httpStatusCode.NOT_FOUND, "Division ID not found", "");
     }
-
-
-    if (payload.name) {
-        payload.slug = payload.name.trim().toLowerCase().replace(/\s+/g, "-");
-
-        const slugExists = await Division.findOne({ slug: payload.slug, _id: { $ne: divisionId } });
-        if (slugExists) {
-            throw new AppError(httpStatusCode.CONFLICT, "Slug already exists", "");
-        }
-    
-        const nameExists = await Division.findOne({ name: payload.name, _id: { $ne: divisionId } });
-        if (nameExists) {
-            throw new AppError(httpStatusCode.CONFLICT, "Name already exists", "");
-        }
-    }
-
-     if (payload.slug) {
-        payload.slug = payload.slug.trim().toLowerCase().replace(/\s+/g, "-");
+    const duplicateDivision = await Division.findOne({
+        name: payload.name,
+        _id: { $ne: divisionId },
+    });
+    if (duplicateDivision) {
+        throw new AppError(httpStatusCode.CONFLICT, "A division with this name already exists.", "");
     }
 
 
-    const division = await Division.findByIdAndUpdate(divisionId, payload, { new: true, runValidators: true });
-    if (!division) {
-        throw new AppError(httpStatusCode.NOT_FOUND, "Division not found", "");
+    const updateDivision = await Division.findByIdAndUpdate(
+        divisionId, payload, { new: true, runValidators: true }
+    );
+   
+    return updateDivision;
     }
-    return division;
-    }
+
+
     const deleteDivision = async (divisionId: string) => {
-    const divisionIdExist = await Division.findById(divisionId);
-    if (!divisionIdExist) {
-        throw new AppError(httpStatusCode.NOT_FOUND, "Division ID not found", "");
+        await Division.findByIdAndDelete(divisionId);   
+        return null;
     }
-    const division = await Division.findByIdAndDelete(divisionId);
-    if (!division) {
-        throw new AppError(httpStatusCode.NOT_FOUND, "Division not found", "");
-    }
-    return division;
-}
 
-export const divisionService = {
+export const DivisionService = {
     createDivision,
     getAllDivision,
+    getSingleDivision,
     updateDivision,
     deleteDivision
 }
