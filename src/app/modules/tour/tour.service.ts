@@ -1,8 +1,11 @@
+
 import httpStatusCode from 'http-status-codes';
 import AppError from "../../errorHelpers/AppError";
 
 import { Tour, TourType } from '../tour/tour.model';
 import { ITour, ITourType } from './tour.interface';
+import { tourSearchableFields } from './tour.constant';
+import { QueryBuilder } from '../../utils/QueryBuilder';
 
 
 
@@ -25,16 +28,35 @@ const createTour = async(payload:  ITour) => {
     return tour;
 }
 
-const getAllTours = async()=>{
-    const tour = await Tour.find({})
-    .populate('division')
-    .populate('tourType');
-    const countTour = await Tour.countDocuments();
+
+
+const getAllTours = async(query: Record<string, string>)=>{     
+     
+    const queryBuilder = new QueryBuilder(Tour.find(), query );
+    const tours = queryBuilder
+    .search(tourSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate()   
+
+    const [data, meta] = await Promise.all([
+        tours.build(),
+        queryBuilder.getMeta()
+
+    ])
+
     return {
-        data: tour,
-        meta: {
-            total: countTour
-        }
+        data,
+        meta
+    }
+}
+
+const getSingleTour = async (slug: string)=>{
+    const result = await Tour.findOne({slug});
+   
+    return {
+        data: result,
     }
 }
 
@@ -42,15 +64,7 @@ const updateTour = async(tourId: string, payload: Partial<ITour>)=>{
     const existingTour = await Tour.findById(tourId);
     if(!existingTour){
         throw new AppError(httpStatusCode.NOT_FOUND, "Tour ID not found", "");
-    }
-    // if(payload.division){
-    //     const divisionExists = await Division.findById(payload.division);
-    //     if (!divisionExists) throw new Error("Division not found");
-    // }
-    // if(payload.tourType){
-    //     const tourTypeExists = await TourType.findById(payload.tourType);
-    //     if (!tourTypeExists) throw new Error("Tour type not found");
-    // }
+    }   
     const updatedTour = await Tour.findByIdAndUpdate(tourId, payload, {new: true, runValidators: true});
     return updatedTour
 }
@@ -69,6 +83,7 @@ const createTourType = async(payload: ITourType)=>{
     if (existingTourType) {
         throw new Error("Tour type already exists.");
     }
+    const name  = payload;
 
     return await TourType.create({ name });
     
@@ -96,14 +111,16 @@ const deleteTourType = async(tourTypesId: string)=>{
         throw new AppError(httpStatusCode.NOT_FOUND, "Tour Types ID not found", "");
     }
 
-    return await TourType.findByIdAndDelete(tourTypesId);
+     await TourType.findByIdAndDelete(tourTypesId);
+     return null;
  
 }
 
 
 export const TourService = {    
     createTour,
-    getAllTours,   
+    getAllTours,      
+    getSingleTour, 
     updateTour,
     deleteTour,
     getAllTourTypes,
