@@ -20,6 +20,7 @@ const createDivision = catchAsync(async(req:Request, res: Response, next:NextFun
 });
 
 const getAllDivision = catchAsync(async(req:Request, res: Response, next:NextFunction)=> {
+
     const result = await DivisionService.getAllDivision();
     sendResponse(res, {
         success: true,

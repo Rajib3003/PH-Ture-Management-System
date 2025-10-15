@@ -1,8 +1,10 @@
+
 import httpStatusCode from 'http-status-codes';
 import AppError from "../../errorHelpers/AppError";
 
 import { Tour, TourType } from '../tour/tour.model';
 import { ITour, ITourType } from './tour.interface';
+import { tourSearchableFields } from './tour.constant';
 
 
 
@@ -25,10 +27,21 @@ const createTour = async(payload:  ITour) => {
     return tour;
 }
 
-const getAllTours = async()=>{
-    const tour = await Tour.find({})
-    .populate('division')
-    .populate('tourType');
+const getAllTours = async(query: Record<string, string>)=>{
+     
+     const filter = query ;   
+
+     const searchTerm = query.searchTerm || "";   
+     // jokhon ami searchbar a location and searchTerm diye search korbo tokhon oi 2 ta jinish er maje searchTerm ta delete kore diye just location ta dibe . karon filter exjists meching thakte hoy searching ta full word match korte hoy na. kicho letter match korlei hoy. tai jokhon 2 ta jinish diye search korbo tokhon searchTerm ta filter theke delete kore dite hobe. 
+     delete filter.searchTerm; 
+     const searchQuery = {
+        $or: tourSearchableFields.map(field => ({
+        [field]: { $regex: searchTerm, $options: "i" } 
+     }))
+     } 
+
+    const tour = await Tour.find(searchQuery)
+    .find(filter)
     const countTour = await Tour.countDocuments();
     return {
         data: tour,
@@ -42,15 +55,7 @@ const updateTour = async(tourId: string, payload: Partial<ITour>)=>{
     const existingTour = await Tour.findById(tourId);
     if(!existingTour){
         throw new AppError(httpStatusCode.NOT_FOUND, "Tour ID not found", "");
-    }
-    // if(payload.division){
-    //     const divisionExists = await Division.findById(payload.division);
-    //     if (!divisionExists) throw new Error("Division not found");
-    // }
-    // if(payload.tourType){
-    //     const tourTypeExists = await TourType.findById(payload.tourType);
-    //     if (!tourTypeExists) throw new Error("Tour type not found");
-    // }
+    }   
     const updatedTour = await Tour.findByIdAndUpdate(tourId, payload, {new: true, runValidators: true});
     return updatedTour
 }
@@ -69,6 +74,7 @@ const createTourType = async(payload: ITourType)=>{
     if (existingTourType) {
         throw new Error("Tour type already exists.");
     }
+    const name  = payload;
 
     return await TourType.create({ name });
     
@@ -96,7 +102,8 @@ const deleteTourType = async(tourTypesId: string)=>{
         throw new AppError(httpStatusCode.NOT_FOUND, "Tour Types ID not found", "");
     }
 
-    return await TourType.findByIdAndDelete(tourTypesId);
+     await TourType.findByIdAndDelete(tourTypesId);
+     return null;
  
 }
 
