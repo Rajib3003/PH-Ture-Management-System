@@ -30,19 +30,15 @@ const createTour = async(payload:  ITour) => {
 
 
 
-const getAllTours = async(query: Record<string, string>)=>{
-     
+const getAllTours = async(query: Record<string, string>)=>{     
      
     const queryBuilder = new QueryBuilder(Tour.find(), query );
-
-    const tours = await queryBuilder
+    const tours = queryBuilder
     .search(tourSearchableFields)
     .filter()
     .sort()
     .fields()
-    .paginate()
-    
-
+    .paginate()   
 
     const [data, meta] = await Promise.all([
         tours.build(),
@@ -50,11 +46,17 @@ const getAllTours = async(query: Record<string, string>)=>{
 
     ])
 
-
-
     return {
         data,
         meta
+    }
+}
+
+const getSingleTour = async (slug: string)=>{
+    const result = await Tour.findOne({slug});
+   
+    return {
+        data: result,
     }
 }
 
@@ -117,7 +119,8 @@ const deleteTourType = async(tourTypesId: string)=>{
 
 export const TourService = {    
     createTour,
-    getAllTours,   
+    getAllTours,      
+    getSingleTour, 
     updateTour,
     deleteTour,
     getAllTourTypes,
