@@ -10,15 +10,20 @@ const router = Router();
 
 
 
-
+router.get(
+    "/", 
+    DivisionController.getAllDivision
+);
 router.post(
     "/create",
     checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
     validateRequest(createDivisionZodSchema) ,
     DivisionController.createDivision
 );
-router.get("/", DivisionController.getAllDivision);
-router.get("/:slug", DivisionController.getSingleDivision);
+router.get(
+    "/:slug", 
+    DivisionController.getSingleDivision
+);
 router.patch(
     "/:id", 
     checkAuth(Role.ADMIN, Role.SUPER_ADMIN),

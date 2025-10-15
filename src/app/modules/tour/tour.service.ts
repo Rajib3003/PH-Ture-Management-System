@@ -5,6 +5,7 @@ import AppError from "../../errorHelpers/AppError";
 import { Tour, TourType } from '../tour/tour.model';
 import { ITour, ITourType } from './tour.interface';
 import { tourSearchableFields } from './tour.constant';
+import { QueryBuilder } from '../../utils/QueryBuilder';
 
 
 
@@ -27,27 +28,33 @@ const createTour = async(payload:  ITour) => {
     return tour;
 }
 
+
+
 const getAllTours = async(query: Record<string, string>)=>{
      
-     const filter = query ;   
+     
+    const queryBuilder = new QueryBuilder(Tour.find(), query );
 
-     const searchTerm = query.searchTerm || "";   
-     // jokhon ami searchbar a location and searchTerm diye search korbo tokhon oi 2 ta jinish er maje searchTerm ta delete kore diye just location ta dibe . karon filter exjists meching thakte hoy searching ta full word match korte hoy na. kicho letter match korlei hoy. tai jokhon 2 ta jinish diye search korbo tokhon searchTerm ta filter theke delete kore dite hobe. 
-     delete filter.searchTerm; 
-     const searchQuery = {
-        $or: tourSearchableFields.map(field => ({
-        [field]: { $regex: searchTerm, $options: "i" } 
-     }))
-     } 
+    const tours = await queryBuilder
+    .search(tourSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate()
+    
 
-    const tour = await Tour.find(searchQuery)
-    .find(filter)
-    const countTour = await Tour.countDocuments();
+
+    const [data, meta] = await Promise.all([
+        tours.build(),
+        queryBuilder.getMeta()
+
+    ])
+
+
+
     return {
-        data: tour,
-        meta: {
-            total: countTour
-        }
+        data,
+        meta
     }
 }
 
