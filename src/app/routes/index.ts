@@ -1,4 +1,5 @@
 import { authRoutes } from '../modules/auth/auth.router';
+import { bookingRoutes } from '../modules/booking/booking.router';
 import { divisionRoutes } from '../modules/division/division.router';
 import { tourRoutes } from '../modules/tour/tour.router';
 import { userRoutes } from './../modules/user/user.router';
@@ -22,6 +23,10 @@ const modelRoutes = [
     {
         path: "/tour",
         route: tourRoutes
+    },
+    {
+        path: "/booking",
+        route: bookingRoutes
     },
 ]
 
