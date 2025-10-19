@@ -9,6 +9,8 @@ import { PAYMENT_STATUS } from '../payment/payment.interface';
 import { Tour } from '../tour/tour.model';
 import { ISSLCommerz } from '../sslCommerz/sslCommerz.interface';
 import { SSLService } from '../sslCommerz/sslCommerz.service';
+import { QueryBuilder } from '../../utils/QueryBuilder';
+import { bookingSearchableFields } from './booking.constant';
 
 
 const getTransactionId = ()=>{
@@ -76,10 +78,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
     } 
     
     const sslPayment = await SSLService.sslPaymentInit(sslPayload)
-    console.log("After SSL init");
-
-
-console.log(sslPayload);
+    
 
     await session.commitTransaction();
     session.endSession();
@@ -95,23 +94,55 @@ console.log(sslPayload);
         throw error
     }
 
-
-
-
    
 }
-const getUserBookings = async () => {
-    return {}
+
+const getAllBookings = async (query: Record<string, string>) => {
+
+    const queryBuilder = new QueryBuilder(Booking.find(), query );
+    
+    const divisions = queryBuilder
+    .search(bookingSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate()         
+
+    const [data, meta] = await Promise.all([
+        divisions.build(),
+        queryBuilder.getMeta()    
+    ])         
+
+    return {
+        data,
+        meta
+    }
+   
 }
-const getBookingById = async () => {
-    return {}
+const getBookingById = async (bookingId : string) => {
+    // const bookingId = payload.
+    const result = await Booking.findById(bookingId)
+    
+     return {
+        data: result,
+    }
 }
-const updateBookingStatus = async () => {
-    return {}
+
+const getUserBookings = async (userId : string) => {
+    const result = await Booking.find({ user: userId })    
+    return {
+        data: result,
+    }
 }
-const getAllBookings = async () => {
-    return {}
+
+const updateBookingStatus = async (bookingId: string, status: string) => {
+   
+    const result = await Booking.findByIdAndUpdate(bookingId, { status }, { new: true, runValidators: true })
+      return {
+        data: result,
+    }
 }
+
 
 
 

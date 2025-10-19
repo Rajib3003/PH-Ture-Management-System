@@ -1,3 +1,4 @@
+
 import httpStatusCode from 'http-status-codes';
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
@@ -18,7 +19,9 @@ const createBooking = catchAsync(async (req: Request, res: Response)=>{
 });
 
 const getUserBookings = catchAsync(async(req:Request, res: Response)=>{
-    const bookings = await BookingService.getUserBookings();
+    const decodeToken = req.user as JwtPayload
+    const userId = decodeToken.userId;    
+    const bookings = await BookingService.getUserBookings(userId);    
       sendResponse(res, {
         statusCode : httpStatusCode.OK,
         success: true,
@@ -27,26 +30,32 @@ const getUserBookings = catchAsync(async(req:Request, res: Response)=>{
     });
 });
 const getSingleBooking = catchAsync(async(req:Request, res:Response)=>{
-    const booking = await BookingService.getBookingById();
+    const decodeToken = req.params
+    const bookingId = decodeToken.bookingId   
+    const booking = await BookingService.getBookingById(bookingId);    
       sendResponse(res, {
         statusCode : httpStatusCode.OK,
         success: true,
-        message: "Booking retrieved successfully",
+        message: "Booking retrieved successfully",        
         data: booking,
     });
 })
 const getAllBookings = catchAsync(async(req:Request, res:Response)=>{
-    const bookings = await BookingService.getAllBookings();
+    const query = req.query
+    const result = await BookingService.getAllBookings(query as Record<string, string>);
       sendResponse(res, {
         statusCode : httpStatusCode.OK,
         success: true,
         message: "Booking retrieved successfully",
-        data: {bookings}
-        // meta: {}
+        meta: result.meta,
+        data: result.data
     });
 })
 const updateBookingStatus = catchAsync(async(req:Request, res:Response)=>{
-    const updated = await BookingService.updateBookingStatus();
+    const  bookingId  = req.params.bookingId;
+  const  status  = req.body.status;
+
+    const updated = await BookingService.updateBookingStatus(bookingId,status);
       sendResponse(res, {
         statusCode : httpStatusCode.OK,
         success: true,
