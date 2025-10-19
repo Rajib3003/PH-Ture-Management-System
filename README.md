@@ -95,7 +95,15 @@ google authenticaton korar jonno
 - 6. division ar maje (division.service.ts) file create korte hobe.
 
 routes folder a index.ts (division.router.ts) import korte hoy <br>
-division.router.ts file a division.controller.ts import korte hoy <br> division.controller.ts file a division.service.ts import korte hoy <br>  -> 
+division.router.ts file a division.controller.ts import korte hoy <br> division.controller.ts file a division.service.ts import korte hoy <br>  
+
+# SSLcommerz developer 
+- sslcommerz developer google search kore account create korte hobe. tobe email adderss ta obosoi valid dite hobe onno sob unvalid dile o problem nai. 
+- username and password ta mone rakhte hobe cause next time 2 ta diye login korte hobe. 
+- sokol information email a asbe. 
+
+# install 
+- npm i axios (install korte hobe)
 
 
 
