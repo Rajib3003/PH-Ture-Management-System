@@ -1,20 +1,20 @@
-import  httpStatusCode  from 'http-status-codes';
+
 import { envVars } from "../../config/env";
-import AppError from "../../errorHelpers/AppError";
+
 import { ISSLCommerz } from "./sslCommerz.interface";
 import axios from "axios";
 const sslPaymentInit =async (payload: ISSLCommerz) => {
 
     try {
         const data = {
-        store_id: envVars.SSL.STORE_ID,
-        store_passwd: envVars.SSL.STORE_PASS,
+        store_id: envVars.SSL.SSL_STORE_ID,
+        store_passwd: envVars.SSL.SSL_STORE_PASS,
         total_amount: payload.amount,
         currency: "BDT",
         tran_id: payload.transactionId,
-        success_url: envVars.SSL.SSL_SUCCESS_BACKEND_URL,
-        fail_url: envVars.SSL.SSL_FAIL_BACKEND_URL,
-        cancel_url: envVars.SSL.SSL_CANCEL_BACKEND_URL,
+        success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=success`,
+        fail_url: `${envVars.SSL.SSL_FAIL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=fail`,
+        cancel_url: `${envVars.SSL.SSL_CANCEL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=cancel`,
         shipping_method: "N/A",
         product_name: "Tour",
         product_category: "Service",
@@ -41,19 +41,14 @@ const sslPaymentInit =async (payload: ISSLCommerz) => {
         method: "POST",
         url : envVars.SSL.SSL_PAYMENT_API,
         data: data,
-        headers: {"content-Type": "application/x-www-form-rulencoded"}
+        headers: {"Content-Type": "application/x-www-form-urlencoded"}
 
     })
 
     // const data = response.data;
     return  response.data;
     } catch (error: unknown) {
-        console.log("Payment Error Occured", error);
-        if (error instanceof Error) {
-            throw new AppError(httpStatusCode.BAD_REQUEST, error.message, "");
-        } else {
-            throw new AppError(httpStatusCode.BAD_REQUEST, "An unknown error occurred", "");
-        }
+        console.log("Payment Error Occured", error);    
     }
 }
 export const SSLService = {

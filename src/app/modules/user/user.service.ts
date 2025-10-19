@@ -54,9 +54,9 @@ const updateUser = async (userId : string, payload : Partial<IUser> , decodedTok
         payload.password = await bcryptjs.hash(payload.password, envVars.BCRYPT_SALT_ROUND)
     }
     
-console.log("=============",payload)
+
     const newUpdatedUser = await User.findByIdAndUpdate(userId, payload, {new: true, runValidators: true})
-    console.log("=============",newUpdatedUser)
+    
     return newUpdatedUser
 }
 
