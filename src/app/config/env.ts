@@ -30,9 +30,12 @@ interface EnvConfig {
         SSL_CANCEL_FRONTEND_URL: string,        
         SSL_VALIDATION_API: string,
     };
-    CLOUDINARY_CLOUD_NAME: string,
-    CLOUDINARY_API_KEY: string,
-    CLOUDINARY_API_SECRET: string,
+    CLOUDINARY: {
+        CLOUDINARY_CLOUD_NAME: string,
+        CLOUDINARY_API_KEY: string,
+        CLOUDINARY_API_SECRET: string,
+    }
+    
 }
 
 const loadEnvVariables = () : EnvConfig => {
@@ -101,9 +104,12 @@ const loadEnvVariables = () : EnvConfig => {
             SSL_CANCEL_FRONTEND_URL: process.env.SSL_CANCEL_FRONTEND_URL as string,
             SSL_VALIDATION_API: process.env.SSL_VALIDATION_API as string,
         },
-        CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
-        CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
-        CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
+        CLOUDINARY:{
+            CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+            CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+            CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
+        }
+        
 
     }
 }
