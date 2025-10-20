@@ -105,6 +105,12 @@ division.router.ts file a division.controller.ts import korte hoy <br> division.
 # install 
 - npm i axios (install korte hobe)
 
+# file upload er jonno install korte hobe
+- npm i multer
+- npm i @types/multer
 
+# image rakhar jonno amake cloudnary install and website a jaite hobe
+
+- npm i cloudinary
 
 
