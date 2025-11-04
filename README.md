@@ -115,4 +115,7 @@ division.router.ts file a division.controller.ts import korte hoy <br> division.
 
 - npm i multer-storage-cloudinary (nijer pc te file create na kore multer nijei cloudinary maje image gulo rakhbe. midelware hisabe kaj korbe ei package ta)
 
+# email pathanor jonno nodemailer use korte hobe
+- npm i nodemailer
+- npm i @types/nodemailer
 

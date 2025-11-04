@@ -3,9 +3,10 @@ import { envVars } from './env';
 import passport from "passport";
 import { Strategy as GoogleStrategy, Profile, VerifyCallback } from "passport-google-oauth20";
 import { User } from '../modules/user/user.model';
-import { Role } from '../modules/user/user.interface';
+import { isActived, Role } from '../modules/user/user.interface';
 import { Strategy as LoacalStrategy } from 'passport-local';
 import bcryptjs from 'bcryptjs';
+
 
 passport.use(
     new LoacalStrategy({
@@ -17,6 +18,19 @@ passport.use(
 
             if(!isUserExist){
                 return done(null, false, {message: "User does not exist"})
+            }
+
+            if(!isUserExist.isVerified){
+                // throw new AppError(httpStatusCode.BAD_REQUEST, "User is not Verified Yet","");
+              return done("User is not Verified Yet")
+            }
+            if(isUserExist.isActived === isActived.BLOCKED || isUserExist.isActived === isActived.INACTIVE){
+                // throw new AppError(httpStatusCode.BAD_REQUEST, `User is ${isUserExist.isActived}`,"");
+               return done(`User is ${isUserExist.isActived}`)
+            }
+            if(isUserExist.isDeleted){
+                // throw new AppError(httpStatusCode.BAD_REQUEST, "User is Deleted","");
+                return done("User is Deleted")
             }
 
             const isGoogleAuthenticated = isUserExist.auths?.some((providerObjects)=> providerObjects.provider === "Google")
@@ -58,10 +72,25 @@ passport.use(
                 return done(null, false, {message: "NO email found"})
             }
             // email ta diye database theke user ta niye asbe
-            let user = await User.findOne({email})
+            let isUserExist = await User.findOne({email})
+            
+            if(isUserExist && !isUserExist.isVerified){
+                // throw new AppError(httpStatusCode.BAD_REQUEST, "User is not Verified Yet","");           
+              return done(null, false, {message: "User is not Verified Yet"})
+            }
+            if(isUserExist && (isUserExist.isActived === isActived.BLOCKED || isUserExist.isActived === isActived.INACTIVE)){
+                // throw new AppError(httpStatusCode.BAD_REQUEST, `User is ${isUserExist.isActived}`,"");
+               return done(`User is ${isUserExist.isActived}`)
+            }
+            if(isUserExist && isUserExist.isDeleted){
+                // throw new AppError(httpStatusCode.BAD_REQUEST, "User is Deleted","");
+                return done(null, false, {message: "User is Deleted"})
+            }
+            
+            
             // jodi user na pay ta hole new akta user create korbe tar jonno niche ja ja dorkar ta information dite hobe beshi kore profile theke information paoya jabe.
-            if(!user){
-                user = await User.create({
+            if(!isUserExist){
+                isUserExist = await User.create({
                     email,
                     name: profile.displayName,
                     picture: profile.photos?.[0].value,
@@ -76,7 +105,7 @@ passport.use(
                 })
             }
             // done ar maje 3 ta argument dite hoy. doner upore hover korle show kore, 2nd argument a user return korte hobe.
-            return done(null, user)
+            return done(null, isUserExist)
         } catch (error) {
             console.log("Google strategy Error",error)
             // next er maje jemon error dite hoiche temon done ar maje error diye dibo.

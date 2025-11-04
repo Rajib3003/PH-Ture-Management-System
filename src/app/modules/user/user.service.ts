@@ -94,9 +94,19 @@ const getAllUsers = async (query: Record<string, string>) => {
             meta
         }
 }
+const getMe = async (userId : string) => {
+    const user = await User.findById(userId).select('-password -auths -__v');
+    if(!user){
+        throw new AppError(httpStatusCode.NOT_FOUND, "User Not Found", "")
+    }
+    return {
+        data: user,
+    }
+}
 
 export const userService = {
     createUser,
     updateUser,
+    getMe,
     getAllUsers
 }
