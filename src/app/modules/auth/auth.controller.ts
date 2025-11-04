@@ -10,6 +10,7 @@ import { setAuthCookie } from '../../utils/setCookie';
 import { createUserTokens } from '../../utils/userTokens';
 import { envVars } from '../../config/env';
 import passport from 'passport';
+import { JwtPayload } from 'jsonwebtoken';
 
 const credentialsLogin = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
 
@@ -19,6 +20,7 @@ const credentialsLogin = catchAsync(async(req: Request, res: Response, next: Nex
     passport.authenticate("local", async (err:any, user: any, info: any)=>{
         if(err){
             return next(err)
+            // return next(new AppError(err.httpStatusCode || 401, err.message, ""))
         }
         if(!user){
             return next(new AppError(httpStatusCode.UNAUTHORIZED, info.message, ""))
@@ -94,6 +96,25 @@ const logout = catchAsync(async(req: Request, res: Response, next: NextFunction)
         data: null,
     })
 })
+const changePassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    
+    const decodedToken = req.user;
+    const newPassword = req.body.newPassword;
+    const oldPassword = req.body.oldPassword;
+
+    if(!decodedToken){
+        throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")
+    }
+
+    await AuthService.resetPassword(oldPassword, newPassword, decodedToken)
+
+    sendResponse(res, {
+        success: true,
+        message: "Password Changed successfully!!",
+        statusCode: httpStatusCode.OK,
+        data: null,
+    })
+})
 const resetPassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     
     const decodedToken = req.user;
@@ -105,6 +126,24 @@ const resetPassword = catchAsync(async(req: Request, res: Response, next: NextFu
     }
 
     await AuthService.resetPassword(oldPassword, newPassword, decodedToken)
+
+    sendResponse(res, {
+        success: true,
+        message: "Password Changed successfully!!",
+        statusCode: httpStatusCode.OK,
+        data: null,
+    })
+})
+const setPassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    
+    const decodedToken = req.user as JwtPayload;
+    const {password} = req.body
+
+    if(!decodedToken){
+        throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")
+    }
+
+    await AuthService.setPassword( decodedToken.userId, password)
 
     sendResponse(res, {
         success: true,
@@ -144,6 +183,8 @@ export const AuthController = {
     credentialsLogin,
     getNewAccessToken,
     logout,
-    resetPassword,
+    changePassword,
+    resetPassword,    
+    setPassword,    
     googleCallbackController
 }
