@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatusCode from 'http-status-codes';
 import { NextFunction, Request, Response } from "express";
@@ -106,7 +107,7 @@ const changePassword = catchAsync(async(req: Request, res: Response, next: NextF
         throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")
     }
 
-    await AuthService.resetPassword(oldPassword, newPassword, decodedToken)
+    await AuthService.changePassword(oldPassword, newPassword, decodedToken)
 
     sendResponse(res, {
         success: true,
@@ -117,15 +118,15 @@ const changePassword = catchAsync(async(req: Request, res: Response, next: NextF
 })
 const resetPassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     
-    const decodedToken = req.user;
-    const newPassword = req.body.newPassword;
-    const oldPassword = req.body.oldPassword;
+   
+    const {newPassword, id} = req.body;
+     const decodedToken = req.user;
 
     if(!decodedToken){
         throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")
     }
 
-    await AuthService.resetPassword(oldPassword, newPassword, decodedToken)
+    await AuthService.resetPassword(newPassword, id, decodedToken as JwtPayload)
 
     sendResponse(res, {
         success: true,
@@ -148,6 +149,22 @@ const setPassword = catchAsync(async(req: Request, res: Response, next: NextFunc
     sendResponse(res, {
         success: true,
         message: "Password Changed successfully!!",
+        statusCode: httpStatusCode.OK,
+        data: null,
+    })
+})
+const forgotPassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    
+    
+    const {email} = req.body
+
+  
+
+    await AuthService.forgotPassword(email)
+
+    sendResponse(res, {
+        success: true,
+        message: "Email sent successfully!!",
         statusCode: httpStatusCode.OK,
         data: null,
     })
@@ -185,6 +202,7 @@ export const AuthController = {
     logout,
     changePassword,
     resetPassword,    
-    setPassword,    
+    setPassword,  
+    forgotPassword,  
     googleCallbackController
 }

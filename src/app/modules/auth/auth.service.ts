@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import bcryptjs, { hash } from 'bcryptjs';
 import httpStatusCode from 'http-status-codes';
@@ -7,7 +8,9 @@ import { User } from "../user/user.model";
 import { createNewAccessTokenWithRefreshToken } from '../../utils/userTokens';
 import { JwtPayload } from 'jsonwebtoken';
 import { envVars } from '../../config/env';
-import { IAuthProvider } from '../user/user.interface';
+import { IAuthProvider, isActived } from '../user/user.interface';
+import jwt from 'jsonwebtoken';
+import { sendEmail } from '../../utils/sendEmail';
 
 
 // const credentialsLogin = async (payload : Partial<IUser>) => {
@@ -85,21 +88,10 @@ const changePassword = async (oldPassword: string, newPassword: string, decodedT
     user.save();
     
 }
-const resetPassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+
+const resetPassword = async (newPassword: string, id: string, decodedToken: JwtPayload) => {
     
-    // const user = await User.findById(decodedToken.userId)
-    // if(!user){
-    //     throw new AppError(httpStatusCode.BAD_REQUEST, "auth service User do not recieved", "")
-    // }
-
-    // const isOldPasswordMatch = await bcryptjs.compare(oldPassword, user.password as string)
-
-    // if(!isOldPasswordMatch){
-    //     throw new AppError(httpStatusCode.BAD_REQUEST, "Old password does not match", "")
-    // }
-
-    // user.password = await bcryptjs.hash(newPassword, Number(envVars.BCRYPT_SALT_ROUND)) 
-    // user.save();
+   
 
     return{};
     
@@ -127,11 +119,48 @@ const setPassword = async (userId: string, plainPassword: string) => {
     await user.save();
     
 }
+const forgotPassword = async (email: string) => {
+    const isUserExist = await User.findOne({email})
+
+       if(!isUserExist){
+            throw new AppError(httpStatusCode.BAD_REQUEST, "User does not Exist","");
+        }
+        if(!isUserExist.isVerified){
+            throw new AppError(httpStatusCode.BAD_REQUEST, "User is not Verified Yet","");
+        }
+        if(isUserExist.isActived === isActived.BLOCKED || isUserExist.isActived === isActived.INACTIVE){
+            throw new AppError(httpStatusCode.BAD_REQUEST, `User is ${isUserExist.isActived}`,"");
+        }
+        if(isUserExist.isDeleted){
+            throw new AppError(httpStatusCode.BAD_REQUEST, "User is Deleted","");
+        }
+
+        const jwtPayload = {
+            userId: isUserExist._id,
+            email: isUserExist.email,
+            role: isUserExist.role,
+        }
+    const resetToken = jwt.sign(jwtPayload, envVars.JWT_ACCESS_SECRET, {
+        expiresIn : "10m"
+    })
+
+    const resetUILink = `${envVars.FRONTEND_URL}/reset-password?id=${isUserExist._id}&token=${resetToken}`
+    sendEmail({
+        to: isUserExist.email as string,
+        subject: "Password Reset Link",
+        templateName: "forgetPassword",
+        templateData: {
+            name: isUserExist.name,
+            resetUILink: resetUILink
+        }
+    })
+}
 
 export const AuthService = {
     // credentialsLogin,
     getNewAccessToken,
     changePassword,
     resetPassword,
+    forgotPassword,
     setPassword
 }
