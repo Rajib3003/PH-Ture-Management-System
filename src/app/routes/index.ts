@@ -1,8 +1,9 @@
-import { authRoutes } from '../modules/auth/auth.router';
-import { bookingRoutes } from '../modules/booking/booking.router';
-import { divisionRoutes } from '../modules/division/division.router';
-import { paymentRoutes } from '../modules/payment/payment.router';
-import { tourRoutes } from '../modules/tour/tour.router';
+import { AuthRoutes } from '../modules/auth/auth.router';
+import { BookingRoutes } from '../modules/booking/booking.router';
+import { DivisionRoutes } from '../modules/division/division.router';
+import { OtpRoutes } from '../modules/otp/otp.router';
+import { PaymentRoutes } from '../modules/payment/payment.router';
+import { TourRoutes } from '../modules/tour/tour.router';
 import { userRoutes } from './../modules/user/user.router';
 import { Router } from "express";
 
@@ -15,23 +16,27 @@ const modelRoutes = [
     },
     {
         path: "/auth",
-        route: authRoutes
+        route: AuthRoutes
     },
     {
         path: "/division",
-        route: divisionRoutes
+        route: DivisionRoutes
     },
     {
         path: "/tour",
-        route: tourRoutes
+        route: TourRoutes
     },
     {
         path: "/booking",
-        route: bookingRoutes
+        route: BookingRoutes
     },
     {
         path: "/payment",
-        route: paymentRoutes
+        route: PaymentRoutes
+    },
+    {
+        path: "/otp",
+        route: OtpRoutes
     },
 ]
 

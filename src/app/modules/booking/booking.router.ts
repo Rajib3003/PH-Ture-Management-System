@@ -37,4 +37,4 @@ router.patch(
     )
 
 
-    export const bookingRoutes = router
+    export const BookingRoutes = router
