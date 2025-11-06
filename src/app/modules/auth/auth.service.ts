@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import bcryptjs, { hash } from 'bcryptjs';
@@ -89,8 +90,18 @@ const changePassword = async (oldPassword: string, newPassword: string, decodedT
     
 }
 
-const resetPassword = async (newPassword: string, id: string, decodedToken: JwtPayload) => {
-    
+const resetPassword = async (payload: Record<string, any>, decodedToken: JwtPayload) => {
+    if(payload.id != decodedToken.userId){
+        throw new AppError(httpStatusCode.UNAUTHORIZED, "You are not authorized to reset password", "")
+    }
+
+    const isUserExist = await User.findById(decodedToken.userId)
+    if(!isUserExist){
+        throw new AppError(httpStatusCode.BAD_REQUEST, "auth service User do not recieved", "")
+    }
+    const hashedPassword = await bcryptjs.hash(payload.newPassword, Number(envVars.BCRYPT_SALT_ROUND));
+    isUserExist.password = hashedPassword;
+    await isUserExist.save();
    
 
     return{};

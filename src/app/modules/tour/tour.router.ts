@@ -66,4 +66,4 @@ router.delete(
 
 
 
-export const tourRoutes = router
+export const TourRoutes = router

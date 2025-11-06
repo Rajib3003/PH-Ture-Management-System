@@ -14,4 +14,4 @@ router.post("/fail", PaymentController.failPayment)
 router.post("/cancel", PaymentController.cancelPayment)
 
 
-export const paymentRoutes = router
+export const PaymentRoutes = router

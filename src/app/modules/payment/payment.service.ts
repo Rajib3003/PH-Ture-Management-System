@@ -8,6 +8,10 @@ import { PAYMENT_STATUS } from "./payment.interface";
 import { Payment } from "./payment.model";
 import { ISSLCommerz } from '../sslCommerz/sslCommerz.interface';
 import { SSLService } from '../sslCommerz/sslCommerz.service';
+import { generatedPdf, IInvoiceData } from '../../utils/invoice';
+import { ITour } from '../tour/tour.interface';
+import { IUser } from '../user/user.interface';
+import { sendEmail } from '../../utils/sendEmail';
 
 
 
@@ -57,12 +61,58 @@ const successPayment = async (query : Record<string, string>) => {
         status: PAYMENT_STATUS.PAID,        
     },{runValidators:true, session:session})
 
-    await Booking
+    if(!updatedPayment) {
+        throw new AppError(httpStatusCode.NOT_FOUND, "Payment not found", "")
+    }
+
+   const updatedBooking = await Booking
     .findByIdAndUpdate(
         updatedPayment?.booking, 
         {status: BOOKING_STATUS.COMPLETE},
-        {runValidators:true, session}
+        {new : true, runValidators:true, session}
     )
+    .populate("tour", "title")
+    .populate("user","name email");
+
+    if(!updatedBooking) {
+        throw new AppError(httpStatusCode.NOT_FOUND, "Booking not found for generating invoice", "")
+    }
+
+    const invoiceData: IInvoiceData = {
+        bookingDate: updatedBooking?.createdAt as Date,
+        guestCount: updatedBooking.guestCount,
+        totalAmount: updatedPayment.amount,
+        tourTitle: (updatedBooking?.tour as unknown as ITour).title,
+        customerName: (updatedBooking?.user as unknown as IUser).name,        
+        transactionId: updatedPayment.transactionId, 
+    }
+
+    const pdfBuffer = await generatedPdf(invoiceData)
+
+    await sendEmail({
+        to: (updatedBooking?.user as unknown as IUser).email,
+        subject: "Your Booking Invoice",
+        templateName: "invoice",
+        // templateData: {
+        //     name: (updatedBooking?.user as unknown as IUser).name,
+        //     tourTitle: (updatedBooking?.tour as unknown as ITour).title,
+        //     bookingDate: updatedBooking?.createdAt as Date,
+        //     guestCount: updatedBooking.guestCount,
+        //     totalAmount: updatedPayment.amount,
+        //     transactionId: updatedPayment.transactionId,
+        // },   
+        templateData: invoiceData,     
+        attachments: [
+            {
+                filename: `invoice_${updatedPayment.transactionId}.pdf`,
+                content: pdfBuffer,
+                contentType: 'application/pdf',
+            }
+        ]
+    })
+
+
+
     await session.commitTransaction();
     session.endSession();
     return {success : true, message: "Payment completed Successfully"}        

@@ -119,14 +119,14 @@ const changePassword = catchAsync(async(req: Request, res: Response, next: NextF
 const resetPassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     
    
-    const {newPassword, id} = req.body;
+    
      const decodedToken = req.user;
 
     if(!decodedToken){
         throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")
     }
 
-    await AuthService.resetPassword(newPassword, id, decodedToken as JwtPayload)
+    await AuthService.resetPassword(req.body, decodedToken as JwtPayload)
 
     sendResponse(res, {
         success: true,

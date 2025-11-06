@@ -25,4 +25,4 @@ passport.authenticate("google", {scope: ["profile","email"],state: redirect as s
 // api/v1/auth/google/callback?state=/booking
 router.get("/google/callback", passport.authenticate("google", {failureRedirect: `${envVars.FRONTEND_URL}/login?error=There is some issues with your account. Please contact with our support team`}) ,AuthController.googleCallbackController)
 
-export const authRoutes = router
+export const AuthRoutes = router

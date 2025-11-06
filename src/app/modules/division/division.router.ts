@@ -39,4 +39,4 @@ router.delete(
     DivisionController.deleteDivision
 );
 
-export const divisionRoutes = router
+export const DivisionRoutes = router

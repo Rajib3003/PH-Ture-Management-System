@@ -122,3 +122,15 @@ email template pathanor jonno ejs use kora hoy. google search kore ejs documenti
 - npm i ejs -f
 - npm i @types/ejs -f
 
+# email verify ache kina oita OTP er sahajje verify korar jonno Redis use korbo 
+- Redis hoche sort time memory , ja kina sob kicho tar ram a rakhe. 
+- google theke redis search kore login korte hobe and oder websider Docs theke documention pore kaj korte hobe
+- amra kaj korbo Docs->Client API -> node-redis 
+- npm install redis
+
+# invoice pdf akare print korte pdfkit npm install korte hobe
+- npm i pdfkit
+- npm i @types/pdfkit
+
+
+
