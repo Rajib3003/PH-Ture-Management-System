@@ -30,10 +30,23 @@ const createUser = async (payload: Partial<IUser>) => {
 }
 
 const updateUser = async (userId : string, payload : Partial<IUser> , decodedToken : JwtPayload) => {
+
+    if(decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE){
+        if(userId !== decodedToken.userId){
+            throw new AppError(httpStatusCode.FORBIDDEN, "You are not Authorized", "")
+        }
+    }
+
+
+
     const userIdExist = await User.findById(userId)
 
     if(!userIdExist){
         throw new AppError(httpStatusCode.NOT_FOUND, "User Id Not Found", "")
+    }
+
+    if(decodedToken.role === Role.ADMIN && userIdExist.role === Role.SUPER_ADMIN){
+        throw new AppError(httpStatusCode.FORBIDDEN, "You are not Authorized", "")
     }
 
 
@@ -41,18 +54,16 @@ const updateUser = async (userId : string, payload : Partial<IUser> , decodedTok
         if(decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE){
             throw new AppError(httpStatusCode.FORBIDDEN, "You are not Authorized", "")
         }
-        if(payload.role === Role.SUPER_ADMIN && decodedToken.role === Role.ADMIN){
-             throw new AppError(httpStatusCode.FORBIDDEN, "You are not Authorized", "")
-        }
+        // if(payload.role === Role.SUPER_ADMIN && decodedToken.role === Role.ADMIN){
+        //      throw new AppError(httpStatusCode.FORBIDDEN, "You are not Authorized", "")
+        // }
     }
     if(payload.isActived || payload.isDeleted || payload.isVerified){
          if(decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE){
             throw new AppError(httpStatusCode.FORBIDDEN, "You are not Authorized", "")
         }
     }
-    if(payload.password){
-        payload.password = await bcryptjs.hash(payload.password, envVars.BCRYPT_SALT_ROUND)
-    }
+   
     
 
     const newUpdatedUser = await User.findByIdAndUpdate(userId, payload, {new: true, runValidators: true})
@@ -104,9 +115,20 @@ const getMe = async (userId : string) => {
     }
 }
 
+const getSingleUser = async (userId : string) => {
+    const user = await User.findById(userId).select('-password -auths -__v');
+    if(!user){
+        throw new AppError(httpStatusCode.NOT_FOUND, "User Not Found", "")
+    }
+    return {
+        data: user,
+    }
+}
+
 export const userService = {
     createUser,
     updateUser,
     getMe,
-    getAllUsers
+    getAllUsers,
+    getSingleUser
 }
