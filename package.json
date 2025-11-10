@@ -4,7 +4,9 @@
   "description": "<!-- GitMind workflow create kora -->\r <!-- draw.io database draw kora  -->\r <!-- git init, git checkout -b \"development\" -->\r <!-- git subbranch create kora , git checkout -b \"project-setup\"  -->\r <!-- project start -->\r npm init -y",
   "main": "index.js",
   "scripts": {
+    "start": "node ./dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
+    "build": "tsc",
     "lint": "npx eslint ./src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,16 +24,16 @@
     "@types/passport-local": "^1.0.38",
     "eslint": "^9.35.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.43.0"
-  },
-  "dependencies": {
+    "typescript-eslint": "^8.43.0",
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.3",
     "@types/multer": "^2.0.0",
     "@types/nodemailer": "^7.0.3",
-    "@types/pdfkit": "^0.17.3",
+    "@types/pdfkit": "^0.17.3"
+  },
+  "dependencies": {
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^1.37.2",
