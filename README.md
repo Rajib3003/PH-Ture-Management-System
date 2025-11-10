@@ -132,5 +132,5 @@ email template pathanor jonno ejs use kora hoy. google search kore ejs documenti
 - npm i pdfkit
 - npm i @types/pdfkit
 
-
+https://ph-tour-managment-system.vercel.app
 
