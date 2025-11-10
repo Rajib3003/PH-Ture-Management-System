@@ -3,6 +3,7 @@ import { BookingRoutes } from '../modules/booking/booking.router';
 import { DivisionRoutes } from '../modules/division/division.router';
 import { OtpRoutes } from '../modules/otp/otp.router';
 import { PaymentRoutes } from '../modules/payment/payment.router';
+import { StatsRoutes } from '../modules/stats/stats.router';
 import { TourRoutes } from '../modules/tour/tour.router';
 import { userRoutes } from './../modules/user/user.router';
 import { Router } from "express";
@@ -37,6 +38,10 @@ const modelRoutes = [
     {
         path: "/otp",
         route: OtpRoutes
+    },
+    {
+        path: "/stats",
+        route: StatsRoutes
     },
 ]
 

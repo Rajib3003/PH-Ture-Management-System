@@ -34,14 +34,14 @@ export const updateUserZodSchema = z.object({
     .max(50, { message: "Name maximum length 50" })
     .optional(),
     
-    password: z
-    .string().refine(val => typeof val === "string", { message: "Password must be a string" })
-    .min(8, { message: "Password must be at least 8 characters long" })
-    .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
-    .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
-    .regex(/[0-9]/, { message: "Password must contain at least one number" })
-    .regex(/[\W_]/, { message: "Password must contain at least one special character" })
-    .optional(), 
+    // password: z
+    // .string().refine(val => typeof val === "string", { message: "Password must be a string" })
+    // .min(8, { message: "Password must be at least 8 characters long" })
+    // .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
+    // .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
+    // .regex(/[0-9]/, { message: "Password must contain at least one number" })
+    // .regex(/[\W_]/, { message: "Password must contain at least one special character" })
+    // .optional(), 
     phone: z
     .string().refine(val => typeof val === "string", { message: "Phone Number must be a string" })
     .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
