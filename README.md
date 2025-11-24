@@ -1,8 +1,8 @@
 
-<!-- GitMind workflow create kora -->
-<!-- draw.io database draw kora  -->
-<!-- git init, git checkout -b "development" -->
-<!-- git subbranch create kora , git checkout -b "project-setup"  -->
+GitMind workflow create kora
+draw.io database draw kora 
+git init, git checkout -b "development"
+git subbranch create kora , git checkout -b "project-setup" 
 <!-- project start -->
 npm init -y 
 npm install -D typescript 
@@ -53,7 +53,7 @@ npm i ts-node-dev @types/express @types/cors @types/dotenv @types/jsonwebtoken
 <!-- amader joto status code ache oi gulo hate likhte hobe na default status deoya ache oi khan theke choice kore dilei hobe er jonn termianl a command ta run kore install korte hobe -->
 npm i http-status-codes
 
-# one module work setp by setp flow 
+# one module work step by step flow 
 - route matching (app.ts -> routes to index.ts -> user.router.ts )
 - controller 
 - service

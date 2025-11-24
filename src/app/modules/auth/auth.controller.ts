@@ -6,7 +6,6 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { AuthService } from './auth.service';
 import AppError from '../../errorHelpers/AppError';
-import { set } from 'mongoose';
 import { setAuthCookie } from '../../utils/setCookie';
 import { createUserTokens } from '../../utils/userTokens';
 import { envVars } from '../../config/env';
