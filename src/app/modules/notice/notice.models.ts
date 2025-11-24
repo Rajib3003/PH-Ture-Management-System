@@ -10,7 +10,7 @@ const noticeTypeSchema = new Schema<INoticeType>({
 })
 
 
-export const NoticeType = model<INoticeType>("TourType", noticeTypeSchema)
+export const NoticeType = model<INoticeType>("NoticeType", noticeTypeSchema)
 
 
 
