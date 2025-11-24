@@ -1,7 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNoticeZodSchema = void 0;
+exports.updateNoticeZodSchema = exports.createNoticeZodSchema = exports.updateNoticeTypesZodSchema = exports.createNoticeTypesZodSchema = void 0;
 const zod_1 = require("zod");
+exports.createNoticeTypesZodSchema = zod_1.z.object({
+    name: zod_1.z
+        .string()
+        .refine(val => typeof val === "string", {
+        message: "Name must be a string",
+    })
+        .min(2, { message: "Name minimum length 2" })
+        .max(50, { message: "Name maximum length 50" }),
+});
+exports.updateNoticeTypesZodSchema = zod_1.z.object({
+    name: zod_1.z
+        .string()
+        .refine(val => typeof val === "string", {
+        message: "Name must be a string",
+    })
+        .min(2, { message: "Name minimum length 2" })
+        .max(50, { message: "Name maximum length 50" })
+        .optional(),
+});
 // Zod schema for Notice
 exports.createNoticeZodSchema = zod_1.z.object({
     title: zod_1.z
@@ -17,12 +36,24 @@ exports.createNoticeZodSchema = zod_1.z.object({
         .string()
         .max(1000, "Description must be at most 1000 characters")
         .optional(),
-    link: zod_1.z
+    noticeType: zod_1.z.string().optional(),
+});
+exports.updateNoticeZodSchema = zod_1.z.object({
+    title: zod_1.z
         .string()
-        .url("Invalid URL")
+        .min(3, "Title must be at least 3 characters long")
+        .max(200, "Title must be at most 200 characters long")
         .optional(),
-    photo: zod_1.z
+    date: zod_1.z
         .string()
-        .url("Invalid photo URL")
+        .refine((val) => !isNaN(Date.parse(val)), {
+        message: "Invalid date format",
+    })
         .optional(),
+    description: zod_1.z
+        .string()
+        .max(1000, "Description must be at most 1000 characters")
+        .optional(),
+    noticeType: zod_1.z.string().optional(),
+    deleteImages: zod_1.z.array(zod_1.z.string()).optional(),
 });

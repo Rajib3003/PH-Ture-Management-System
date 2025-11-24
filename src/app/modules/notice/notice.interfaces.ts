@@ -1,9 +1,16 @@
+import { Types } from "mongoose";
 
+
+export interface INoticeType {
+    name: string;
+}
 export interface INotice {
-  id: number;
+  id?: number;
   title: string;
+  slug: string;
   date: Date;        
-  description?: string; 
-  link?: string;    
-  photo?: string;    
+  description?: string;    
+  images?: string[];   
+  deleteImages?: string[];
+  noticeType: Types.ObjectId;
 }
