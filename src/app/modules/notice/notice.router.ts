@@ -12,9 +12,8 @@ import { NoticeController } from "./notice.controllers";
 const router = Router();
 
 router.post(
-    "/create",
+    "/notice-create",
     checkAuth(...Object.values(Role)),
-    // multerUpload.single("file"),
     validateRequest(createNoticeZodSchema) ,
     NoticeController.createNotice
 );

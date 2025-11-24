@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatusCode  from 'http-status-codes';
-import { Notice } from "./notice.models";
 import catchAsync from "../../utils/catchAsync";
 import { NextFunction, Request, Response } from "express";
 import sendResponse from "../../utils/sendResponse";
@@ -11,15 +10,8 @@ import { NoticeService } from './notice.service';
 
 
 const createNotice = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-   
-   
-
-    const payload = req.body;
-
-    
-    const result = await NoticeService.createNotice(payload)
-
-    
+    const payload = req.body;    
+    const result = await NoticeService.createNotice(payload)    
     sendResponse(res, {
       success: true,
       message: "Notice created successfully!",

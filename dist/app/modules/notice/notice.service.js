@@ -17,12 +17,10 @@ const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
 const notice_models_1 = require("./notice.models");
 const createNotice = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    // Check for duplicate title
     const existingNotice = yield notice_models_1.Notice.findOne({ title: payload.title });
     if (existingNotice) {
         throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "A notice with this title already exists.", "");
     }
-    // Create and save notice
     const notice = yield notice_models_1.Notice.create(Object.assign(Object.assign({}, payload), { date: new Date(payload.date) }));
     return notice;
 });
