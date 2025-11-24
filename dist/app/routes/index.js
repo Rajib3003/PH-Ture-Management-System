@@ -4,6 +4,7 @@ exports.router = void 0;
 const auth_router_1 = require("../modules/auth/auth.router");
 const booking_router_1 = require("../modules/booking/booking.router");
 const division_router_1 = require("../modules/division/division.router");
+const notice_router_1 = require("../modules/notice/notice.router");
 const otp_router_1 = require("../modules/otp/otp.router");
 const payment_router_1 = require("../modules/payment/payment.router");
 const stats_router_1 = require("../modules/stats/stats.router");
@@ -43,6 +44,10 @@ const modelRoutes = [
     {
         path: "/stats",
         route: stats_router_1.StatsRoutes
+    },
+    {
+        path: "/notice",
+        route: notice_router_1.NoticeRoutes
     },
 ];
 modelRoutes.forEach((route) => {

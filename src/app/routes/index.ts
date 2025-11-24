@@ -1,6 +1,7 @@
 import { AuthRoutes } from '../modules/auth/auth.router';
 import { BookingRoutes } from '../modules/booking/booking.router';
 import { DivisionRoutes } from '../modules/division/division.router';
+import { NoticeRoutes } from '../modules/notice/notice.router';
 import { OtpRoutes } from '../modules/otp/otp.router';
 import { PaymentRoutes } from '../modules/payment/payment.router';
 import { StatsRoutes } from '../modules/stats/stats.router';
@@ -42,6 +43,10 @@ const modelRoutes = [
     {
         path: "/stats",
         route: StatsRoutes
+    },
+    {
+        path: "/notice",
+        route: NoticeRoutes
     },
 ]
 
