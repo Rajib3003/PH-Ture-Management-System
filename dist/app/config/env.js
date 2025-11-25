@@ -7,7 +7,24 @@ exports.envVars = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const loadEnvVariables = () => {
-    const requiredEnvVariables = ["PORT", "DB_URL", "NODE_ENV", "BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_REFRESH_SECRET", "JWT_REFRESH_EXPIRES", "GOOGLE_CLIENT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CALLBACK_URL", "EXPRESS_SESSION_SECRET", "FRONTEND_URL", "SSL_STORE_ID",
+    const requiredEnvVariables = [
+        "PORT",
+        "DB_URL",
+        "NODE_ENV",
+        "BCRYPT_SALT_ROUND",
+        "JWT_ACCESS_EXPIRES",
+        "JWT_ACCESS_SECRET",
+        "SUPER_ADMIN_EMAIL",
+        "SUPER_ADMIN_PASSWORD",
+        "JWT_REFRESH_SECRET",
+        "JWT_REFRESH_EXPIRES",
+        "GOOGLE_CLIENT_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CALLBACK_URL",
+        "EXPRESS_SESSION_SECRET",
+        "FRONTEND_URL",
+        "FRONTEND_URL_WEBSIDE",
+        "SSL_STORE_ID",
         "SSL_STORE_PASS",
         "SSL_PAYMENT_API", "SSL_VALIDATION_API", "SSL_SUCCESS_FRONTEND_URL",
         "SSL_FAIL_FRONTEND_URL",
@@ -23,7 +40,8 @@ const loadEnvVariables = () => {
         "SMTP_FROM", "REDIS_HOST",
         "REDIS_PORT",
         "REDIS_USERNAME",
-        "REDIS_PASSWORD", "SSL_IPN_URL"];
+        "REDIS_PASSWORD", "SSL_IPN_URL"
+    ];
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
             throw new Error(`Missing require environment variabl ${key}`);
@@ -46,6 +64,7 @@ const loadEnvVariables = () => {
         GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
         EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET,
         FRONTEND_URL: process.env.FRONTEND_URL,
+        FRONTEND_URL_WEBSIDE: process.env.FRONTEND_URL_WEBSIDE,
         // ssl
         SSL: {
             SSL_STORE_ID: process.env.SSL_STORE_ID,
