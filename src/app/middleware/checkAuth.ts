@@ -12,6 +12,8 @@ import { isActived } from '../modules/user/user.interface';
 
 export const checkAuth = (...authRoles: string[]) => async(req: Request, res: Response, next: NextFunction)=> {
     try {
+        const token = req.cookies.accessToken;
+console.log("token====", token);
         const accessToken = req.headers.authorization;
 
         if(!accessToken){
