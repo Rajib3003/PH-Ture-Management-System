@@ -38,12 +38,17 @@ app.use((0, cors_1.default)({
             callback(null, true);
         }
         else {
+            console.log("Blocked by CORS:", origin);
             callback(new Error("Not allowed by CORS"));
         }
     },
     credentials: true,
 }));
 app.use("/api/v1", routes_1.router);
+app.get("/test-cookie", (req, res) => {
+    console.log("All cookies:", req.cookies);
+    res.send({ cookies: req.cookies });
+});
 app.get("/", (req, res) => {
     res.status(200).json({
         message: "Welcome to Tour Management System Backend"

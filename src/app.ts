@@ -34,12 +34,17 @@ app.use(cors({
         if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
+            console.log("Blocked by CORS:", origin);
             callback(new Error("Not allowed by CORS"));
         }
     },
     credentials: true,
 }));
 app.use("/api/v1", router)
+app.get("/test-cookie", (req, res) => {
+    console.log("All cookies:", req.cookies);
+    res.send({ cookies: req.cookies });
+});
 
 app.get("/", (req:Request, res:Response) => {
     res.status(200).json({

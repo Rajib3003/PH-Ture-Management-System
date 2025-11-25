@@ -21,6 +21,8 @@ const user_model_1 = require("../modules/user/user.model");
 const user_interface_1 = require("../modules/user/user.interface");
 const checkAuth = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const token = req.cookies.accessToken;
+        console.log("token====", token);
         const accessToken = req.headers.authorization;
         if (!accessToken) {
             throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "accessToken is not access", "");
