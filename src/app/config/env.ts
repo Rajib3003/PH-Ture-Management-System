@@ -19,6 +19,8 @@ interface EnvConfig {
     EXPRESS_SESSION_SECRET: string
     FRONTEND_URL: string
     FRONTEND_URL_WEBSIDE : string
+    BACKEND_URL : string
+    BACKEND_URL_VERCEL: string
     SSL: {
         SSL_STORE_ID: string,
         SSL_STORE_PASS: string,
@@ -70,23 +72,31 @@ const loadEnvVariables = (): EnvConfig => {
         "EXPRESS_SESSION_SECRET", 
         "FRONTEND_URL",
         "FRONTEND_URL_WEBSIDE", 
+        "BACKEND_URL",
+        "BACKEND_URL_VERCEL",
         "SSL_STORE_ID",
         "SSL_STORE_PASS",
-        "SSL_PAYMENT_API", "SSL_VALIDATION_API", "SSL_SUCCESS_FRONTEND_URL",
+        "SSL_PAYMENT_API", 
+        "SSL_VALIDATION_API", 
+        "SSL_SUCCESS_FRONTEND_URL",
         "SSL_FAIL_FRONTEND_URL",
         "SSL_CANCEL_FRONTEND_URL",
         "SSL_SUCCESS_BACKEND_URL",
         "SSL_FAIL_BACKEND_URL",
-        "SSL_CANCEL_BACKEND_URL", "CLOUDINARY_CLOUD_NAME",
+        "SSL_CANCEL_BACKEND_URL", 
+        "CLOUDINARY_CLOUD_NAME",
         "CLOUDINARY_API_KEY",
-        "CLOUDINARY_API_SECRET", "SMTP_PASS",
+        "CLOUDINARY_API_SECRET", 
+        "SMTP_PASS",
         "SMTP_PORT",
         "SMTP_HOST",
         "SMTP_USER",
-        "SMTP_FROM", "REDIS_HOST",
+        "SMTP_FROM", 
+        "REDIS_HOST",
         "REDIS_PORT",
         "REDIS_USERNAME",
-        "REDIS_PASSWORD", "SSL_IPN_URL"];
+        "REDIS_PASSWORD", 
+        "SSL_IPN_URL"];
 
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
@@ -112,6 +122,8 @@ const loadEnvVariables = (): EnvConfig => {
         EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET as string,
         FRONTEND_URL: process.env.FRONTEND_URL as string,
         FRONTEND_URL_WEBSIDE: process.env.FRONTEND_URL_WEBSIDE as string,
+        BACKEND_URL: process.env.BACKEND_URL as string,
+        BACKEND_URL_VERCEL: process.env.BACKEND_URL_VERCEL as string,
         // ssl
         SSL: {
             SSL_STORE_ID: process.env.SSL_STORE_ID as string,
