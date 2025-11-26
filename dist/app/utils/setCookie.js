@@ -7,6 +7,7 @@ const setAuthCookie = (res, tokenInfo) => {
         res.cookie("accessToken", tokenInfo.accessToken, {
             httpOnly: true,
             secure: env_1.envVars.NODE_ENV === "production",
+            // sameSite: "lax",
             sameSite: env_1.envVars.NODE_ENV === "production" ? "none" : "lax",
             path: "/",
         });
@@ -15,6 +16,7 @@ const setAuthCookie = (res, tokenInfo) => {
         res.cookie("refreshToken", tokenInfo.refreshToken, {
             httpOnly: true,
             secure: env_1.envVars.NODE_ENV === "production",
+            // sameSite: "lax",
             sameSite: env_1.envVars.NODE_ENV === "production" ? "none" : "lax",
             path: "/",
         });

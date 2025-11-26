@@ -13,11 +13,10 @@ import { isActived } from '../modules/user/user.interface';
 export const checkAuth = (...authRoles: string[]) => async(req: Request, res: Response, next: NextFunction)=> {
     try {
         const accessToken = req.cookies.accessToken;
-console.log("token====", accessToken);
-//         const accessToken = req.headers.authorization;
-// console.log("accessToken====", accessToken);
-        const token = req.headers.authorization;
-console.log("accessToken====", token);
+
+        // const accessToken = req.headers.authorization;
+        // console.log("accessToken====", accessToken);
+
         if(!accessToken){
             throw new AppError(httpStatusCode.BAD_REQUEST, "accessToken is not access", "")
         }

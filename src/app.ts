@@ -11,8 +11,10 @@ import { envVars } from "./app/config/env";
 
 const app = express();
 const allowedOrigins = [
-    envVars.FRONTEND_URL,
-    envVars.FRONTEND_URL_WEBSIDE
+    // envVars.FRONTEND_URL,    
+    // envVars.BACKEND_URL,
+    envVars.FRONTEND_URL_WEBSIDE,
+    envVars.BACKEND_URL_VERCEL
 ];
 
 app.use(expressSession({
