@@ -46,7 +46,7 @@ class QueryBuilder {
     }
     paginate() {
         const page = Number(this.query.page) || 1;
-        const limit = this.query.limit ? Number(this.query.limit) : 0;
+        const limit = this.query.limit ? Number(this.query.limit) : 10;
         const skip = (page - 1) * limit;
         this.modelQuery = this.modelQuery.skip(skip).limit(limit);
         return this;
@@ -58,7 +58,7 @@ class QueryBuilder {
         return __awaiter(this, void 0, void 0, function* () {
             const totalDocuments = yield this.modelQuery.model.countDocuments();
             const page = Number(this.query.page) || 1;
-            const limit = Number(this.query.limit) || 10;
+            const limit = this.query.limit ? Number(this.query.limit) : 10;
             const totalPage = Math.ceil(totalDocuments / limit);
             return { page, limit, total: totalDocuments, totalPage };
         });
