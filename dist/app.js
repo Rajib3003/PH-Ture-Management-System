@@ -15,10 +15,8 @@ require("./app/config/passport");
 const env_1 = require("./app/config/env");
 const app = (0, express_1.default)();
 const allowedOrigins = [
-    // envVars.FRONTEND_URL,    
-    // envVars.BACKEND_URL,
-    env_1.envVars.FRONTEND_URL_WEBSIDE,
-    env_1.envVars.BACKEND_URL_VERCEL
+    env_1.envVars.FRONTEND_URL,
+    env_1.envVars.BACKEND_URL,
 ];
 app.use((0, express_session_1.default)({
     secret: env_1.envVars.EXPRESS_SESSION_SECRET,
