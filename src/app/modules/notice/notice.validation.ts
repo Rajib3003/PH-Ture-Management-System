@@ -60,9 +60,23 @@ export const updateNoticeZodSchema = z.object({
     .string()
     .max(1000, "Description must be at most 1000 characters")
     .optional(),
-    noticeType: z.string().optional(),
-    deleteImages: z.array(z.string()).optional(),
-   
+  noticeType: z
+    .string()
+    .optional(),
 
+    deleteImages: z
+  .union([z.string(), z.array(z.string())])
+  .optional()
+  .transform((val) => {
+    if (typeof val === "string") return JSON.parse(val);
+    return val;
+  }),
+
+  // deleteImages: z
+  //   .array(z.string())
+  //   .optional(),
 });
+
+
+
 

@@ -21,7 +21,13 @@ const user_model_1 = require("../modules/user/user.model");
 const user_interface_1 = require("../modules/user/user.interface");
 const checkAuth = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accessToken = req.cookies.accessToken;
+        let accessToken;
+        if (req.headers.authorization) {
+            accessToken = req.headers.authorization;
+        }
+        else if (req.cookies && req.cookies.accessToken) {
+            accessToken = req.cookies.accessToken;
+        }
         // const accessToken = req.headers.authorization;
         // console.log("accessToken====", accessToken);
         if (!accessToken) {
