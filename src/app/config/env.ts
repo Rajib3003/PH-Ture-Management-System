@@ -17,10 +17,8 @@ interface EnvConfig {
     GOOGLE_CLIENT_ID: string
     GOOGLE_CALLBACK_URL: string
     EXPRESS_SESSION_SECRET: string
-    FRONTEND_URL: string
-    FRONTEND_URL_WEBSIDE : string
-    BACKEND_URL : string
-    BACKEND_URL_VERCEL: string
+    FRONTEND_URL: string    
+    BACKEND_URL : string    
     SSL: {
         SSL_STORE_ID: string,
         SSL_STORE_PASS: string,
@@ -70,10 +68,8 @@ const loadEnvVariables = (): EnvConfig => {
         "GOOGLE_CLIENT_ID", 
         "GOOGLE_CALLBACK_URL", 
         "EXPRESS_SESSION_SECRET", 
-        "FRONTEND_URL",
-        "FRONTEND_URL_WEBSIDE", 
-        "BACKEND_URL",
-        "BACKEND_URL_VERCEL",
+        "FRONTEND_URL",        
+        "BACKEND_URL",        
         "SSL_STORE_ID",
         "SSL_STORE_PASS",
         "SSL_PAYMENT_API", 
@@ -120,10 +116,8 @@ const loadEnvVariables = (): EnvConfig => {
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
         GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL as string,
         EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET as string,
-        FRONTEND_URL: process.env.FRONTEND_URL as string,
-        FRONTEND_URL_WEBSIDE: process.env.FRONTEND_URL_WEBSIDE as string,
-        BACKEND_URL: process.env.BACKEND_URL as string,
-        BACKEND_URL_VERCEL: process.env.BACKEND_URL_VERCEL as string,
+        FRONTEND_URL: process.env.FRONTEND_URL as string,       
+        BACKEND_URL: process.env.BACKEND_URL as string,       
         // ssl
         SSL: {
             SSL_STORE_ID: process.env.SSL_STORE_ID as string,

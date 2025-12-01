@@ -23,9 +23,7 @@ const loadEnvVariables = () => {
         "GOOGLE_CALLBACK_URL",
         "EXPRESS_SESSION_SECRET",
         "FRONTEND_URL",
-        "FRONTEND_URL_WEBSIDE",
         "BACKEND_URL",
-        "BACKEND_URL_VERCEL",
         "SSL_STORE_ID",
         "SSL_STORE_PASS",
         "SSL_PAYMENT_API",
@@ -72,9 +70,7 @@ const loadEnvVariables = () => {
         GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
         EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET,
         FRONTEND_URL: process.env.FRONTEND_URL,
-        FRONTEND_URL_WEBSIDE: process.env.FRONTEND_URL_WEBSIDE,
         BACKEND_URL: process.env.BACKEND_URL,
-        BACKEND_URL_VERCEL: process.env.BACKEND_URL_VERCEL,
         // ssl
         SSL: {
             SSL_STORE_ID: process.env.SSL_STORE_ID,
