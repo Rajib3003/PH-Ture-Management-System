@@ -26,11 +26,9 @@ app.use(express.json());
 app.set("trust proxy", 1);
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(cors({
-    // origin: envVars.FRONTEND_URL,
+app.use(cors({    
     origin: (origin, callback) => {
         if (!origin) return callback(null, true);
-
         if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
