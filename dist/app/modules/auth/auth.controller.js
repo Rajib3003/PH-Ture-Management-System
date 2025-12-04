@@ -138,6 +138,8 @@ const resetPassword = (0, catchAsync_1.default)((req, res, next) => __awaiter(vo
 const setPassword = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
     const { password } = req.body;
+    console.log("test===1", decodedToken);
+    console.log("test===2", password);
     if (!decodedToken) {
         throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, " Decoded token is not recieved ", "");
     }
