@@ -4,7 +4,7 @@ import AppError from "../../errorHelpers/AppError";
 
 import { Tour, TourType } from '../tour/tour.model';
 import { ITour, ITourType } from './tour.interface';
-import { tourSearchableFields } from './tour.constant';
+import { tourSearchableFields, tourTypeSearchableFields } from './tour.constant';
 import { QueryBuilder } from '../../utils/QueryBuilder';
 import { deleteImageFromCloudinary } from '../../config/cloudinary.config';
 
@@ -113,8 +113,26 @@ const createTourType = async(payload: ITourType)=>{
     
 }
 
-const getAllTourTypes = async()=>{
-    return await TourType.find(); 
+const getAllTourTypes = async(query: Record<string, string>)=>{
+    const baseQuery = TourType.find(); 
+    const queryBuilder = new QueryBuilder(baseQuery, query);     
+    const tourTypes = queryBuilder
+    .search(tourTypeSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate()   
+
+    const [data, meta] = await Promise.all([
+        tourTypes.build(),
+        queryBuilder.getMeta()
+
+    ])    
+
+    return {
+        data,
+        meta
+    }
 }
 
 

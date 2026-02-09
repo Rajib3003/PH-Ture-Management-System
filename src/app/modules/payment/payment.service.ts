@@ -23,12 +23,13 @@ const initPayment = async (bookingId : string) => {
     const payment = await Payment.findOne({booking: bookingId})
     
     if(!payment){
-        throw new AppError(httpStatusCode.NOT_FOUND, "Payment Not Found. You havve not booked this tour","");
+        throw new AppError(httpStatusCode.NOT_FOUND, "Payment Not Found. You have not booked this tour","");
     }
 
-    const booking = await Booking.findById(payment.booking)
+    const booking = await Booking.findById(payment.booking).populate("user")
+    console.log("booking",booking)
 
-    const userAddress = (booking?.user as any).address
+        const userAddress = (booking?.user as any).address
         const userEmail = (booking?.user as any).email
         const userPhoneNumber = (booking?.user as any).phone
         const userName = (booking?.user as any).name
@@ -43,9 +44,10 @@ const initPayment = async (bookingId : string) => {
         } 
         
         const sslPayment = await SSLService.sslPaymentInit(sslPayload)
-        
+        // console.log("sslPayload",sslPayment.GatewayPageURL ?? sslPayment.gatewayPageURL ?? sslPayment.url)
         return {
             paymentUrl : sslPayment.GatewayPageURL,
+            // paymentUrl : sslPayment.GatewayPageURL ?? sslPayment.gatewayPageURL ?? sslPayment.url,
         }
 
 

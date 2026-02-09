@@ -37,8 +37,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
         throw new AppError(httpStatusCode.BAD_REQUEST, "No Tour Cost Found","")
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const amount = Number(tour.costFrom) * Number(payload.guestCount!)
-    console.log(amount)
+    const amount = Number(tour.costFrom) * Number(payload.guestCount!)    
 
     const booking = await Booking.create([{
         user: userId,

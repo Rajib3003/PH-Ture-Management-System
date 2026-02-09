@@ -26,18 +26,34 @@ app.use(express.json());
 app.set("trust proxy", 1);
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(cors({    
-    origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
+app.use((req, res, next) => {
+    if (req.path.startsWith("/api/v1/payment")) {        
+        return next();
+    }
+    cors({
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true); 
+            if (allowedOrigins.includes(origin)) return callback(null, true);
             console.log("Blocked by CORS:", origin);
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-}));
+            return callback(new Error("Not allowed by CORS"));
+        },
+        credentials: true,
+    })(req, res, next); 
+});
+
+// app.use("/api/v1/payment", (req, res, next) => next());
+// app.use(cors({    
+//     origin: (origin, callback) => {
+//         if (!origin) return callback(null, true);
+//         if (allowedOrigins.includes(origin)) {
+//            return callback(null, true);
+//         } else {
+//             console.log("Blocked by CORS:", origin);
+//             return callback(new Error("Not allowed by CORS"));
+//         }
+//     },
+//     credentials: true,
+// }));
 app.use("/api/v1", router)
 app.get("/test-cookie", (req, res) => {
     console.log("All cookies:", req.cookies);

@@ -137,9 +137,7 @@ const resetPassword = catchAsync(async(req: Request, res: Response, next: NextFu
 const setPassword = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     
     const decodedToken = req.user as JwtPayload;
-    const {password} = req.body
-    console.log("test===1",decodedToken)
-    console.log("test===2",password)
+    const {password} = req.body    
 
     if(!decodedToken){
         throw new AppError(httpStatusCode.BAD_REQUEST, " Decoded token is not recieved ", "")

@@ -50,7 +50,7 @@ const sslPaymentInit =async (payload: ISSLCommerz) => {
         headers: {"Content-Type": "application/x-www-form-urlencoded"}
 
     })
-
+    
     // const data = response.data;
     return  response.data;
     } catch (error: unknown) {

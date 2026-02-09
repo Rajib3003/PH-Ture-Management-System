@@ -10,9 +10,11 @@ export const setAuthCookie = (res: Response, tokenInfo: AuthTokens ) => {
     if(tokenInfo.accessToken){
         res.cookie("accessToken", tokenInfo.accessToken,{
             httpOnly: true,
-            secure: envVars.NODE_ENV === "production",
-            // sameSite: "lax",
-            sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
+            // secure: true,
+            // secure: envVars.NODE_ENV === "production",
+            secure: envVars.NODE_ENV === "development" ? true : envVars.NODE_ENV === "production",
+            sameSite: "none",
+            // sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
             path: "/",
         })
     }
@@ -20,9 +22,11 @@ export const setAuthCookie = (res: Response, tokenInfo: AuthTokens ) => {
     if(tokenInfo.refreshToken){
         res.cookie("refreshToken", tokenInfo.refreshToken,{
             httpOnly: true,
-            secure: envVars.NODE_ENV === "production",
-            // sameSite: "lax",
-            sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
+            // secure: true,
+            // secure: envVars.NODE_ENV === "production",
+            secure: envVars.NODE_ENV === "development" ? true : envVars.NODE_ENV === "production",
+            sameSite: "none",
+            // sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
             path: "/",
         })
     }

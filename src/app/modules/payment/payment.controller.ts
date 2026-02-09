@@ -12,7 +12,7 @@ const initPayment = catchAsync(async(req: Request, res: Response)=> {
     const bookingId = req.params.bookingId
 
     const result = await PaymentService.initPayment(bookingId);
-
+    
     sendResponse(res, {
         statusCode:httpStatusCode.OK,
         success: true,
